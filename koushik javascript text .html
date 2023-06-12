@@ -1,1 +1,79 @@
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+    }
+    .posts {
+      width: 100%;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      transition: all 0.4s;
+      flex-wrap: wrap;
+    }
+    .post {
+      width: 23%;
+      margin: 0.1rem;
+      box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+      padding: 1rem;
+    }
+    .post:hover {
+      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+    @media screen and (max-width: 992px) {
+      body {
+        background-color: green;
+      }
+      .post {
+        width: 48%;
+      }
+    }
+    @media screen and (max-width: 600px) {
+      .post {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Posts</h1>
+  <div class="posts"></div>
+  <script>
+    const fetchData = async (url) => {
+      try {
+        const response = await axios(url);
+        const data = response.data;
+        return data;
+      } catch (error) {
+        throw new Error("Data is not found");
+      }
+    };
 
+    const postsElement = document.querySelector(".posts");
+    const loadAllData = async () => {
+      const posts = await fetchData("https://jsonplaceholder.typicode.com/posts");
+
+      posts.forEach((post) => {
+        const postElement = document.createElement("div");
+        postElement.classList.add("post");
+        postElement.innerHTML = `
+          <h4 class="post-title">${post.title}</h4>
+          <p class="post-body">${post.body}</p>
+        `;
+        postsElement.appendChild(postElement);
+      });
+    };
+
+    loadAllData();
+  </script>
+</body>
+</html>
